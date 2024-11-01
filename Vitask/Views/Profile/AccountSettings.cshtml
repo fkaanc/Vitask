@@ -1,0 +1,102 @@
+﻿@{
+	ViewData["Title"] = "AccountSettings";
+	Layout = "~/Views/Shared/LayoutUI.cshtml";
+	var user = ViewData["User"] as ProfileViewModel;
+}
+
+
+<nav class="d-flex justify-content-between" aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/Profile/@user.Username">Profil</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Hesap Ayarları</li>
+	</ol>
+	<a href="/MyProfile/SecuritySettings" class="btn btn-info h-25">Security settings</a>
+</nav>
+
+<div class="flex-column d-flex align-items-center">
+	<form asp-controller="File" asp-action="ChangeProfileImage" method="post" enctype="multipart/form-data">
+		<div class="text-center border-end">
+			<img id="Profile" width="100px" height="100px" src="@( user.PictureUrl != null ? "/uploads/images/"+user.PictureUrl : "/assets/images/default_profile_foto.jpg")" class="rounded-circle" alt="">
+
+			<div class="form-group mt-3">
+				<button onclick="ImageCancel()" type="button" class="btn btn-outline-light">İptal</button>
+				<button type="submit" class="btn btn-outline-success">Fotoğrafı Güncelle</button>
+			</div>
+		</div>
+
+
+		<div class="form-group">
+
+
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">Upload</span>
+				</div>
+				<div class="custom-file">
+					<input type="file" name="Image" class="custom-file-input" onchange="ImageChange(event)" id="ProfileImg" />
+					<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+				</div>
+			</div>
+
+		</div>
+	</form>
+
+
+	<form asp-controller="Profile" asp-action="UserInfos" method="post" class="w-100">
+		<div class="">
+
+			<div class="form-group">
+
+				<label for="Title">Ünvan</label>
+				<input id="Title" name="Title" type="text" value="@user.Title" class="form-control w-100" />
+
+			</div>
+
+
+			<div class="form-group">
+				<label for="About">Hakkında</label>
+				<input id="About" name="About" type="text" value="@user.About" class="form-control w-100" />
+			</div>
+
+			<div class="form-group">
+				<label for="Location">Şehir</label>
+				<input id="Location" name="Location" type="text" value="@user.Location" class="form-control w-100" />
+			</div>
+
+			<button class="btn btn-success" type="submit">Güncelle</button>
+		</div>
+	</form>
+
+
+</div>
+
+
+@section Scripts {
+	<script>
+		let image = "@(user.PictureUrl != null ? "/uploads/images/" + user.PictureUrl : "/assets/images/default_profile_foto.jpg")";
+
+		function ImageChange(event) {
+
+			const file = event.target.files[0];
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					document.getElementById('Profile').src = e.target.result;
+					console.log(e.target.result)
+				};
+				reader.readAsDataURL(file);
+			}
+		}
+
+
+
+
+		function ImageCancel() {
+
+			document.getElementById('Profile').src = image;
+			document.getElementById('ProfileImg').value = "";
+		}
+
+
+	</script>
+}

@@ -1,0 +1,49 @@
+﻿@using Entities.Concrete
+@model List<Tag>
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/LayoutUI.cshtml";
+}
+
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/Tag/Index">Tag</a></li>
+		<li class="breadcrumb-item active" aria-current="page">Index</li>
+	</ol>
+</nav>
+
+<div class="table-responsive">
+	<table class="table table-striped table-bordered no-wrap table-hover">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Tag Name</th>
+				@if (User.IsInRole("Admin"))
+				{
+					<th scope="col">Delete</th>
+					<th scope="col">Update</th>
+				}
+				
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.Id</td>
+					<td>@item.Name</td>
+					@if (User.IsInRole("Admin"))
+					{
+						<td><a href="/Tag/DeleteTag/@item.Id" class="btn btn-outline-danger">Delete</a></td>
+						<td><a href="/Tag/EditTag/@item.Id" class="btn btn-outline-success">Update</a></td>
+					}
+				</tr>
+			}
+		</tbody>
+	</table>
+	@if (User.IsInRole("Admin"))
+	{
+		<a href="/Tag/AddTag" class="btn btn-outline-primary">Add Tag</a>
+	}
+
+</div>
